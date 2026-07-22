@@ -1,0 +1,43 @@
+{
+  "name": "snaplint",
+  "version": "0.1.0",
+  "description": "Zero-config project linter. Scan your project, get a health score, fix what's missing.",
+  "main": "dist/index.js",
+  "bin": {
+    "snaplint": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "node dist/test/run.js"
+  },
+  "keywords": [
+    "linter",
+    "project-health",
+    "audit",
+    "security",
+    "quality",
+    "cli",
+    "developer-tools",
+    "best-practices"
+  ],
+  "author": "Christian Kbr <christian@lymeagency.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christiankbr/snaplint.git"
+  },
+  "homepage": "https://github.com/christiankbr/snaplint",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2"
+  }
+}
