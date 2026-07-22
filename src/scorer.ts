@@ -1,4 +1,4 @@
-import { CheckResult, ScoreResult, Grade, CheckCategory } from './types.js';
+import { CheckResult, ScoreResult, Grade } from './types.js';
 
 export function calculateScore(results: CheckResult[]): ScoreResult {
   const byCategory: Record<string, { score: number; max: number }> = {};
@@ -32,7 +32,7 @@ function percentageToGrade(pct: number): Grade {
   return 'F';
 }
 
-export function formatResults(results: CheckResult[], score: ScoreResult): string {
+export function formatResults(results: CheckResult[], score: ScoreResult, quiet: boolean = false): string {
   const lines: string[] = [];
   lines.push('');
   lines.push('  snaplint, project health report');
@@ -53,6 +53,22 @@ export function formatResults(results: CheckResult[], score: ScoreResult): strin
   // Failed checks
   const failed = results.filter(r => r.status === 'fail');
   const warned = results.filter(r => r.status === 'warn');
+  const passed = results.filter(r => r.status === 'pass');
+
+  if (quiet) {
+    if (failed.length === 0 && warned.length === 0) {
+      lines.push('  ✓ All checks passed.');
+      lines.push('');
+    }
+  } else {
+    if (passed.length > 0) {
+      lines.push(`  ✓ ${passed.length} check(s) passed:`);
+      for (const r of passed) {
+        lines.push(`    ${r.name}: ${r.message}`);
+      }
+      lines.push('');
+    }
+  }
 
   if (failed.length > 0) {
     lines.push(`  ✗ ${failed.length} issue(s):`);
@@ -75,15 +91,6 @@ export function formatResults(results: CheckResult[], score: ScoreResult): strin
       if (r.fix) lines.push(`    → Fix: ${r.fix}`);
       lines.push('');
     }
-  }
-
-  const passed = results.filter(r => r.status === 'pass');
-  if (passed.length > 0) {
-    lines.push(`  ✓ ${passed.length} check(s) passed:`);
-    for (const r of passed) {
-      lines.push(`    ${r.name}: ${r.message}`);
-    }
-    lines.push('');
   }
 
   // Summary

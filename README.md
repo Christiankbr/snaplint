@@ -37,7 +37,65 @@ snaplint --format=json
 
 # Output as markdown (for PR comments)
 snaplint --format=markdown
+
+# Only show failures and warnings
+snaplint --quiet
 ```
+
+### Commands
+
+#### `snaplint init`
+
+Creates a `.snaplintrc.json` config file in your project with default settings:
+
+```bash
+snaplint init
+snaplint init ./my-project
+```
+
+Config schema:
+
+```json
+{
+  "checks": ["doc-readme", "license", "sec-secrets", ...],
+  "exclude": [],
+  "failBelow": 50,
+  "format": "text"
+}
+```
+
+- **checks**: List of check IDs to run (empty = all checks)
+- **exclude**: Check IDs to exclude
+- **failBelow**: Minimum score percentage (exit code 1 if below)
+- **format**: Default output format (`text`, `json`, or `markdown`)
+
+#### `snaplint fix`
+
+Automatically creates common missing files:
+
+```bash
+snaplint fix
+snaplint fix ./my-project
+```
+
+Creates:
+- `.gitignore` (based on detected language)
+- `LICENSE` (MIT by default)
+- `.editorconfig`
+- `CONTRIBUTING.md`
+- `CHANGELOG.md`
+
+Doesn't ask for confirmation. Shows what was created.
+
+#### `snaplint watch`
+
+Watch mode — re-scans every 30 seconds and shows score changes:
+
+```bash
+snaplint watch
+```
+
+Only shows output when the score changes. Press Ctrl+C to stop.
 
 ## What it checks
 
@@ -47,18 +105,22 @@ snaplint --format=markdown
 - CODE_OF_CONDUCT.md
 - CHANGELOG.md
 
-### Security (25 pts)
+### Security (30 pts)
 - No exposed .env files
 - No hardcoded secrets (API keys, tokens, private keys)
 - npm audit (vulnerability count)
 - Dependabot configuration
+- GitHub Actions security (permissions, dangerous triggers)
 
-### Quality (30 pts)
+### Quality (33 pts)
 - CI/CD configuration (GitHub Actions, GitLab CI, etc.)
 - Test files present
 - Linter configuration (ESLint, Clippy, Ruff, etc.)
 - Code formatter (Prettier, rustfmt, Black, etc.)
 - .editorconfig
+- TypeScript config strictness (TS projects only)
+- Git hooks (husky, simple-git-hooks, lefthook)
+- Bundle size monitoring (JS/TS projects only)
 
 ### Structure (5 pts)
 - .gitignore exists and is complete for your language
@@ -71,7 +133,7 @@ snaplint --format=markdown
 ### License (5 pts)
 - LICENSE file present and recognized
 
-**Total: 113 points**
+**Total: 121 points**
 
 ## Scoring
 

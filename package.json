@@ -1,6 +1,6 @@
 {
   "name": "snaplint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Zero-config project linter. Scan your project, get a health score, fix what's missing.",
   "main": "dist/index.js",
   "bin": {
